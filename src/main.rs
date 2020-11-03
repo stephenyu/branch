@@ -1,30 +1,30 @@
-use rand::Rng;
-
-fn get_random_number() -> i8 {
-   let mut rng = rand::thread_rng();
-   rng.gen_range(1, 91)
-}
-
-fn unique_number(existing: &Vec<i8>) -> i8 {
-   let mut random_number = get_random_number();
-
-   while existing.contains(&random_number) {
-       random_number = get_random_number();
-   }
-
-   random_number
-}
+use git2::Repository;
+use std::fs::File;
+use std::io::prelude::*;
+use std::process;
 
 fn main() {
-    let mut collected_iterator: Vec<i8> = Vec::with_capacity(25);
+    let repo = Repository::discover(".");
 
-    while collected_iterator.len() < 25 {
-        collected_iterator.push(unique_number(&collected_iterator))
+    match repo {
+        Ok(repository) => {
+            let branch_name = branch_name(&repository);
+            println!("Branch Name: {}", branch_name);
+            let result = repository.find_reference("HEAD");
+            let remote = result.unwrap();
+            // let answer = remote.as_str().unwrap();
+        }
+        Err(_v) => process::exit(0x0100),
     }
+}
 
-    let mut y = 5;
-    while y <= 25 {
-        println!("{:?}", &collected_iterator[y-5..y]);
-        y += 5;
-    }
+fn branch_name(repository: &Repository) -> String {
+    let result = repository.path();
+    let path = format!("{}{}", result.to_str().unwrap(), "HEAD");
+    let mut file = File::open(path).unwrap();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+
+    let array = contents.split("/");
+    array.last().unwrap().to_string()
 }
