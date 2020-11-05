@@ -1,10 +1,12 @@
 [package]
-name = "random-numbers"
+name = "branches"
 version = "0.1.0"
-authors = ["stephenyu <stephen@canva.com>"]
+authors = ["stephenyu <s.yu@less3.com>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 git2 = "0.13.12"
+ascii_table = "3.0.1"
+colored = "2.0.0"
+clap = "2.33.3"
+loading = "0.1.1"
